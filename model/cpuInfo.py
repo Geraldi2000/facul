@@ -1,25 +1,16 @@
 
 import subprocess
-from lumus import cpuInfo
-
-def Converter_dicts(command_exec):
-            try:
-                result = subprocess.run(['powershell', '-Command', command_exec], shell=True, capture_output=True, text=True)
-                lines = result.stdout.splitlines()
-                info_dict = {}
-                for line in lines:
-                    if ':' not in line: continue
-                    key, value = map(str.strip, line.split(':', 1))
-                    info_dict[key] = value
-                return info_dict
-            except:
-                confirm_error = result.stderr
-                print(f"Erro na execucao do comando,\n class: cpuINIT: METH :INFOCPU \n {confirm_error} ")
+from lumus_class import cpuInfo
+from time import sleep
+from lumus_functions import Converter_dicts
 
 class cpuINIT(cpuInfo): 
-    def __init__(self, data) -> None:
-        super().__init__(data)
-
+    
+    def __init__(self,cores,arch,threads,model) -> None:
+         super().__init__()
+         self.cores, self.arch, self.threads, self.model = cores,arch,threads,model
+         return None
+    
     def INFOCPU(self) -> str:
         command = "Get-CimInstance -ClassName Win32_Processor | Select-Object * "
         mount_result = Converter_dicts(command)
@@ -31,22 +22,22 @@ class cpuINIT(cpuInfo):
     def INFOCPU_THREADS(self) -> int:
         command = "Get-CimInstance -ClassName Win32_Processor | Select-Object * "
         mount_result = Converter_dicts(command)
-        threads = mount_result["ThreadCount"]
-        return int(threads)
+        self.threads = mount_result["ThreadCount"]
+        return int(self.threads)
         
-    
     def INFOCPU_MODEL(self) -> str:
         command = "Get-CimInstance -ClassName Win32_Processor | Select-Object * "
         mount_result = Converter_dicts(command)
         model_cpu,name_cpu = mount_result["Description"], mount_result["Name"]
-        return f" Model: {model_cpu}\n {name_cpu}"
+        self.model =  f" Model: {model_cpu}\n {name_cpu}"
+        return self.model
     
     def INFOCPU_ARCH(self) -> str:
         command = "Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object -Property SystemType"
         try:
                 result = subprocess.run(['powershell', '-Command', command], shell=True, capture_output=True, text=True)
-                output = result.stdout
-                return output
+                self.arch = result.stdout
+                return self.arch
         except:
             confirm_error = result.stderr
             print(f"Erro na execucao do comando,\n{confirm_error} ")
@@ -55,12 +46,9 @@ class cpuINIT(cpuInfo):
         command = "Get-CimInstance -ClassName Win32_Processor | Select-Object * "
         mount_result = Converter_dicts(command)
         enable_cores,max_cores = mount_result["NumberOfEnabledCore"], mount_result["NumberOfCores"]
-        return f" Enable cores: {enable_cores}\n Cores: {max_cores}"
+        self.cores =  f" Enable cores: {enable_cores}\n Cores: {max_cores}"
+        return self.cores
 
 
-a = "10" # argumento qualquer 
-instancia_cpuINIT = cpuINIT(a)
-resultado = instancia_cpuINIT.INFOCPU()
-resultado2 = instancia_cpuINIT.INFOCPU_CORES()
-print(resultado2)
+
 
