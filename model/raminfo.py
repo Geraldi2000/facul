@@ -37,5 +37,3 @@ class ramINIT():
         return self.model 
 
     
-teste = ramINIT()
-print(teste.get_ramINFO_MODEL())

@@ -62,33 +62,3 @@ class ramInfo(ABC):
 
 
 
-class procInfo(ABC):
-    
-    @abstractmethod
-    def procINFO(self) -> str:
-        return 
-
-
-    @abstractmethod
-    def procINFO_MAX(self) -> int:
-        return 
-
-    @abstractmethod
-    def procINFO_MODEL(self) -> str:
-        return 
-
-
-    @abstractmethod
-    def procINFO_ARCH(self) -> str:
-        return 
-
-
-    @abstractmethod
-    def procINFO_DDR(self) -> str:
-        return 
-
-
-    @abstractmethod
-    def procINFO_CACHE(self) -> str:
-        return 
-
